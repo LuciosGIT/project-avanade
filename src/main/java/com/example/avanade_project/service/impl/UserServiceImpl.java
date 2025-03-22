@@ -1,6 +1,8 @@
 package com.example.avanade_project.service.impl;
 
+import com.example.avanade_project.converter.UserConverter;
 import com.example.avanade_project.domain.repository.UserRepository;
+import com.example.avanade_project.dtos.UserDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -11,8 +13,9 @@ import com.example.avanade_project.service.UserService;
 import com.example.avanade_project.domain.model.User;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+
 
 @Validated
 @Service
@@ -35,11 +38,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User userToCreate) {
-        if (userRepository.existsByAccountNumber(userToCreate.getAccount().getNumber())) {
-            throw new IllegalArgumentException("This Account number already exists.");
+    public User create(UserDTO userToCreate) {
+        if (userRepository.existsByAccountNumber(userToCreate.account().getNumber())) {
+            throw new IllegalArgumentException("This Account number already exists!");
         }
-        return userRepository.save(userToCreate);
+        if(userRepository.existsByCardNumber(userToCreate.card().getNumber())) {
+        throw new IllegalArgumentException("This Card number already exists!");
+    }
+        return userRepository.save(UserConverter.ConvertUserDTOtoUser(userToCreate));
+    }
+
+    @Override
+    public User updateCardLimit(Long id, BigDecimal limit) {
+        User userToBeFound = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+
+        userToBeFound.getCard().setLimit(limit);
+
+        userRepository.save(userToBeFound);
+
+        return userToBeFound;
+
     }
 
 }
