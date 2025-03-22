@@ -1,6 +1,7 @@
 package com.example.avanade_project.controller;
 
 import com.example.avanade_project.domain.model.User;
+import com.example.avanade_project.dtos.UserDTO;
 import com.example.avanade_project.service.UserService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User userToCreate) {
+    public ResponseEntity<User> create(@RequestBody UserDTO userToCreate) {
         var userCreated = userService.create(userToCreate);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -51,6 +53,10 @@ public class UserController {
         return ResponseEntity.created(location).body(userCreated);
     }
 
-
+    @PutMapping("/update/{id}/{limit}")
+    public ResponseEntity<User> updateCardLimit(@PathVariable Long id , @PathVariable BigDecimal limit) {
+        User updatedUser = userService.updateCardLimit(id, limit);
+        return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+    }
 
 }
