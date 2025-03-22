@@ -3,6 +3,7 @@ package com.example.avanade_project.service.impl;
 import com.example.avanade_project.converter.UserConverter;
 import com.example.avanade_project.domain.repository.UserRepository;
 import com.example.avanade_project.dtos.UserDTO;
+import com.example.avanade_project.dtos.UserPageDTO;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -14,7 +15,9 @@ import com.example.avanade_project.domain.model.User;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 
 @Validated
@@ -28,13 +31,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findAll(@PositiveOrZero int page, @Positive @Max(100) int pageSize) {
-        return userRepository.findAll(PageRequest.of(page, pageSize));
+    public UserPageDTO findAll(@PositiveOrZero int page, @Positive @Max(100) int pageSize) {
+        Page<User> pageOfUsers = userRepository.findAll(PageRequest.of(page, pageSize));
+        List<UserDTO> listOfUsersDTO = pageOfUsers.get().map(UserConverter::ConvertUserToUserDTO).collect(Collectors.toList());
+
+        return new UserPageDTO(listOfUsersDTO, pageOfUsers.getTotalElements(), pageOfUsers.getTotalPages());
     }
 
     @Override
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public UserDTO findById(Long id) {
+        return UserConverter.ConvertUserToUserDTO(userRepository.findById(id).orElseThrow(NoSuchElementException::new));
     }
 
     @Override

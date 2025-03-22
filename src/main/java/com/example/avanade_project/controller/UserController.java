@@ -2,6 +2,7 @@ package com.example.avanade_project.controller;
 
 import com.example.avanade_project.domain.model.User;
 import com.example.avanade_project.dtos.UserDTO;
+import com.example.avanade_project.dtos.UserPageDTO;
 import com.example.avanade_project.service.UserService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -29,16 +30,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll(@RequestParam("page") @PositiveOrZero int page,
+    public ResponseEntity<UserPageDTO> findAll(@RequestParam("page") @PositiveOrZero int page,
                                               @RequestParam("pageSize") @PositiveOrZero @Max(100) int pageSize) {
 
-        Page<User> pageOfUser = userService.findAll(page, pageSize);
-        List<User> listOfUsers = pageOfUser.get().collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(listOfUsers);
+        UserPageDTO pageOfUserDto = userService.findAll(page, pageSize);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pageOfUserDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         var user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
