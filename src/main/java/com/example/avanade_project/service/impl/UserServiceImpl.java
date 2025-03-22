@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.avanade_project.service.UserService;
 import com.example.avanade_project.domain.model.User;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -14,6 +15,11 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -28,4 +34,5 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.save(userToCreate);
     }
+
 }

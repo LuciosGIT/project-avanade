@@ -2,11 +2,13 @@ package com.example.avanade_project.controller;
 
 import com.example.avanade_project.domain.model.User;
 import com.example.avanade_project.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -16,6 +18,12 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> findAll() {
+        List<User> listOfUsers = userService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(listOfUsers);
     }
 
     @GetMapping("/{id}")
@@ -33,4 +41,7 @@ public class UserController {
                 .toUri();
         return ResponseEntity.created(location).body(userCreated);
     }
+
+
+
 }
