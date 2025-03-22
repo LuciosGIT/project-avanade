@@ -1,5 +1,6 @@
 package com.example.avanade_project.controller;
 
+import com.example.avanade_project.converter.UserConverter;
 import com.example.avanade_project.domain.model.User;
 import com.example.avanade_project.dtos.UserDTO;
 import com.example.avanade_project.dtos.UserPageDTO;
@@ -45,19 +46,25 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody UserDTO userToCreate) {
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userToCreate) {
+
         var userCreated = userService.create(userToCreate);
+
+        UserDTO userDtoCreated = UserConverter.ConvertUserToUserDTO(userCreated);
+
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(userCreated.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(userCreated);
+        return ResponseEntity.created(location).body(userDtoCreated);
     }
 
     @PutMapping("/update/{id}/{limit}")
-    public ResponseEntity<User> updateCardLimit(@PathVariable Long id , @PathVariable BigDecimal limit) {
+    public ResponseEntity<UserDTO> updateCardLimit(@PathVariable Long id , @PathVariable BigDecimal limit) {
+
         User updatedUser = userService.updateCardLimit(id, limit);
-        return new ResponseEntity<>(updatedUser, HttpStatus.ACCEPTED);
+        UserDTO updatedUserDto = UserConverter.ConvertUserToUserDTO(updatedUser);
+        return new ResponseEntity<>(updatedUserDto, HttpStatus.ACCEPTED);
     }
 
 }
