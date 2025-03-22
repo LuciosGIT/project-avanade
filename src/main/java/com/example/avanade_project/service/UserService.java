@@ -1,8 +1,10 @@
 package com.example.avanade_project.service;
 
 import com.example.avanade_project.domain.model.User;
-
-import java.util.List;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
 
@@ -10,6 +12,6 @@ public interface UserService {
 
     User create(User userToCreate);
 
-    List<User> findAll();
+    Page<User> findAll(@PositiveOrZero int page, @Positive @Max(100) int pageSize);
 
 }

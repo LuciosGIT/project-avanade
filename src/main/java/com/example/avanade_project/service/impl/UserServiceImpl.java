@@ -1,13 +1,20 @@
 package com.example.avanade_project.service.impl;
 
 import com.example.avanade_project.domain.repository.UserRepository;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.example.avanade_project.service.UserService;
 import com.example.avanade_project.domain.model.User;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Validated
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -18,8 +25,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(@PositiveOrZero int page, @Positive @Max(100) int pageSize) {
+        return userRepository.findAll(PageRequest.of(page, pageSize));
     }
 
     @Override
