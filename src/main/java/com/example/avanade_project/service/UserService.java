@@ -18,4 +18,6 @@ public interface UserService {
 
     User updateCardLimit(Long id, BigDecimal limit);
 
+    void deleteUserById(Long id);
+
 }

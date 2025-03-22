@@ -67,4 +67,12 @@ public class UserController {
         return new ResponseEntity<>(updatedUserDto, HttpStatus.ACCEPTED);
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUserById(@PathVariable Long id) {
+
+        userService.deleteUserById(id);
+
+    }
+
 }
