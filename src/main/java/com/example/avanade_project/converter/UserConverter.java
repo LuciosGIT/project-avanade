@@ -17,4 +17,16 @@ public class UserConverter {
         return user;
     }
 
+    public static UserDTO ConvertUserToUserDTO(User user) {
+
+        return new UserDTO(
+                user.getName(),
+                user.getAccount(),
+                user.getCard(),
+                user.getFeatures(),
+                user.getNews()
+
+        );
+    }
+
 }
