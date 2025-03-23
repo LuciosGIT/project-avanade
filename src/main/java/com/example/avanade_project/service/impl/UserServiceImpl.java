@@ -5,6 +5,7 @@ import com.example.avanade_project.domain.repository.UserRepository;
 import com.example.avanade_project.dtos.UserDTO;
 import com.example.avanade_project.dtos.UserPageDTO;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserPageDTO findAll(@PositiveOrZero int page, @Positive @Max(100) int pageSize) {
+    public UserPageDTO findAll(@PositiveOrZero @NotNull int page, @NotNull @Positive @Max(100) int pageSize) {
         Page<User> pageOfUsers = userRepository.findAll(PageRequest.of(page, pageSize));
         List<UserDTO> listOfUsersDTO = pageOfUsers.get().map(UserConverter::ConvertUserToUserDTO).collect(Collectors.toList());
 
@@ -39,12 +40,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserDTO findById(@Positive @NotNull Long id) {
         return UserConverter.ConvertUserToUserDTO(userRepository.findById(id).orElseThrow(NoSuchElementException::new));
     }
 
     @Override
-    public User create(UserDTO userToCreate) {
+    public User create(@NotNull UserDTO userToCreate) {
         if (userRepository.existsByAccountNumber(userToCreate.account().getNumber())) {
             throw new IllegalArgumentException("This Account number already exists!");
         }
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateCardLimit(Long id, BigDecimal limit) {
+    public User updateCardLimit(@Positive @NotNull Long id, @Positive @NotNull BigDecimal limit) {
         User userToBeFound = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
 
         userToBeFound.getCard().setLimit(limit);
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public void deleteUserById(@Positive @NotNull Long id) {
         userRepository.findById(id).orElseThrow(NoSuchElementException::new);
 
         userRepository.deleteById(id);

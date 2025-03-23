@@ -6,6 +6,8 @@ import com.example.avanade_project.dtos.UserDTO;
 import com.example.avanade_project.dtos.UserPageDTO;
 import com.example.avanade_project.service.UserService;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -40,13 +42,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> findById(@PathVariable @Positive @NotNull Long id) {
         var user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserDTO userToCreate) {
+    public ResponseEntity<UserDTO> create(@RequestBody @NotNull UserDTO userToCreate) {
 
         var userCreated = userService.create(userToCreate);
 
@@ -60,7 +62,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}/{limit}")
-    public ResponseEntity<UserDTO> updateCardLimit(@PathVariable Long id , @PathVariable BigDecimal limit) {
+    public ResponseEntity<UserDTO> updateCardLimit(@PathVariable @Positive @NotNull Long id , @PathVariable @Positive @NotNull BigDecimal limit) {
 
         User updatedUser = userService.updateCardLimit(id, limit);
         UserDTO updatedUserDto = UserConverter.ConvertUserToUserDTO(updatedUser);
@@ -69,7 +71,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUserById(@PathVariable Long id) {
+    public void deleteUserById(@PathVariable @Positive @NotNull Long id) {
 
         userService.deleteUserById(id);
 
