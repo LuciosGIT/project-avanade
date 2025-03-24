@@ -22,6 +22,43 @@ O projeto segue uma arquitetura baseada em camadas:
 
 O domínio da API foi abstraído utilizando **Figma**, facilitando a análise e implementação da solução.
 
+classDiagram
+  class User {
+    -String name
+    -Account account
+    -Feature[] features
+    -Card card
+    -News[] news
+  }
+
+  class Account {
+    -String number
+    -String agency
+    -Number balance
+    -Number limit
+  }
+
+  class Feature {
+    -String icon
+    -String description
+  }
+
+  class Card {
+    -String number
+    -Number limit
+  }
+
+  class News {
+    -String icon
+    -String description
+  }
+
+  User "1" *-- "1" Account
+  User "1" *-- "N" Feature
+  User "1" *-- "1" Card
+  User "1" *-- "N" News
+
+
 ## 📘 Documentação da API
 
 A documentação interativa foi gerada com **Swagger/OpenAPI** e pode ser acessada através do link:
