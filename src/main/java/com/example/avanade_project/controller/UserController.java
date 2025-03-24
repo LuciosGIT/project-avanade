@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get a user by ID", description = "Retrieve a specific user based on its ID")
+    @Operation(summary = "Get an user by ID", description = "Retrieve a specific user based on its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Operation successful"),
             @ApiResponse(responseCode = "404", description = "User not found")
@@ -81,6 +81,7 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}/{limit}")
+    @Operation(summary = "Updates an user card limit", description = "Updates an user card limit")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Card limit updated successfully"),
             @ApiResponse(responseCode = "404", description = "User not found"),
@@ -94,7 +95,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a user", description = "Delete an existing user based on its ID")
+    @Operation(summary = "Delete an user", description = "Delete an existing user based on its ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "404", description = "User not found")
