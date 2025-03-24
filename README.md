@@ -22,6 +22,7 @@ O projeto segue uma arquitetura baseada em camadas:
 
 O domínio da API foi abstraído utilizando **Figma**, facilitando a análise e implementação da solução.
 
+```mermaid 
 classDiagram
   class User {
     -String name
@@ -58,6 +59,7 @@ classDiagram
   User "1" *-- "1" Card
   User "1" *-- "N" News
 
+```
 
 ## 📘 Documentação da API
 
